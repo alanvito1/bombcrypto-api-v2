@@ -1,17 +1,17 @@
 # 🪐 SYSTEM ATLAS - BombCrypto API v2
 
-Este documento serve como a fonte única de verdade (SSOT) para a infraestrutura, serviços e fluxos de dados do ecossistema BombCrypto API v2.
+This document serves as the Single Source of Truth (SSOT) for the infrastructure, services, and data flows of the BombCrypto API v2 ecosystem.
 
-## 🛠️ Serviços Orquestrados
+## 🛠️ Orchestrated Services
 
-| Serviço | Container Name | Porta (Host) | Descrição |
+| Service | Container Name | Port (Host) | Description |
 | :--- | :--- | :--- | :--- |
-| **TH Mode Server** | `ap-th-server` | `8106` | Backend principal para o modo Treasure Hunt. Processa dados do Redis/Mock. |
-| **RPC API** | `ap-rpc-api` | `8105` | Interface de comunicação RPC para interações com o jogo. |
-| **Blockchain Center** | `ap-blockchain-center` | `8107` | Centralizador de monitoramento e integração com a blockchain. |
-| **TH Mode Client** | `th-mode-client` | `5173`* | Dashboard React/Vite para visualização de dados em tempo real. |
+| **TH Mode Server** | `ap-th-server` | `8106` | Main backend for Treasure Hunt mode. Processes data from Redis or Mock sources. |
+| **RPC API** | `ap-rpc-api` | `8105` | RPC communication interface for game interactions. |
+| **Blockchain Center** | `ap-blockchain-center` | `8107` | Central monitoring and blockchain integration hub. |
+| **TH Mode Client** | `th-mode-client` | `5173`* | React/Vite dashboard for real-time data visualization. |
 
-*\* Porta padrão do Vite, acessível localmente via browser.*
+*\* Default Vite port, accessible locally via browser.*
 
 ---
 
@@ -19,43 +19,43 @@ Este documento serve como a fonte única de verdade (SSOT) para a infraestrutura
 
 Base URL: `http://localhost:8106`
 
-| Método | Rota | Descrição | Segurança / Notas |
+| Method | Route | Description | Security / Notes |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/` | Health Check básico do servidor. | Aberto |
-| `GET` | `/health` | Health Check detalhado. | Aberto |
-| `GET` | `/th/` | Health Check do módulo TH. | Aberto |
-| `GET` | `/th/leaderboard` | Exportação de dados do Leaderboard (Treasure Hunt). | Requer Referer válido & Rate Limit (5 req/5s) |
+| `GET` | `/` | Basic server health check. | Public |
+| `GET` | `/health` | Detailed health check. | Public |
+| `GET` | `/th/` | TH module health check. | Public |
+| `GET` | `/th/leaderboard` | Export Leaderboard data (Treasure Hunt). | Requires valid Referer & Rate Limit (5 req/5s) |
 
 ---
 
-## ⚙️ Variáveis de Ambiente Críticas
+## ⚙️ Critical Environment Variables
 
 ### `th-mode-server` (`.env`)
 
-| Variável | Importância | Impacto no Ambiente Local |
+| Variable | Importance | Local Environment Impact |
 | :--- | :--- | :--- |
-| `USE_MOCK_DATA` | **CRÍTICA** | Se `true`, o sistema ignora o Redis e usa o `FakeMessengerService` para gerar dados aleatórios. Essencial para dev sem infra completa. |
-| `REDIS_CONNECTION_STRING` | Alta | Define onde o servidor buscará os eventos reais do jogo quando o Mock está desligado. |
-| `PORT` | Média | Porta interna do container (mapeada para `8106` no host). |
-| `TZ` | Baixa | Define o fuso horário (`Asia/Bangkok` por padrão). |
+| `USE_MOCK_DATA` | **CRITICAL** | If `true`, the system ignores Redis and uses `FakeMessengerService` to generate random data. Essential for development without full infra. |
+| `REDIS_CONNECTION_STRING` | High | Defines where the server fetches real game events when Mock mode is disabled. |
+| `PORT` | Medium | Internal container port (mapped to `8106` on host). |
+| `TZ` | Low | Sets the timezone (`Asia/Bangkok` by default). |
 
 ---
 
-## 🔄 Fluxo de Dados (Deep Scan)
+## 🔄 Data Flow (Deep Scan)
 
-### Modo Simulação (Mock)
-1. `FakeMessengerService` gera payloads randômicos de eventos TH.
-2. `LeaderBoardHandler` processa e armazena o estado atual em memória.
-3. `th-mode-client` solicita dados via `/th/leaderboard`.
-4. O servidor valida o CORS (aberto para dev) e entrega o JSON.
+### Simulation Mode (Mock)
+1. `FakeMessengerService` generates random payloads of TH events.
+2. `LeaderBoardHandler` processes and stores the current state in memory.
+3. `th-mode-client` requests data via `/th/leaderboard`.
+4. Server validates CORS (wide open for dev) and delivers JSON payload.
 
-### Modo Produção (Real)
-1. Redis Stream recebe eventos brutos do jogo.
-2. `MessengerService` consome o stream e decodifica as mensagens.
-3. `LeaderBoardHandler` atualiza o ranking dinâmico.
-4. `th-mode-client` exibe os dados reais processados.
+### Production Mode (Real)
+1. Redis Stream receives raw game events.
+2. `MessengerService` consumes the stream and decodes messages.
+3. `LeaderBoardHandler` updates the dynamic ranking.
+4. `th-mode-client` displays processed real-time events.
 
 ---
 
 > [!TIP]
-> **Manutenção:** Para adicionar novos serviços, atualize o `compose.yaml` e reflita as mudanças neste atlas.
+> **Maintenance:** To add new services, update `compose.yaml` and reflect changes in this atlas.
