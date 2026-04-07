@@ -1,0 +1,25 @@
+/* AutoRefresh Toggle - dark UI refinements */
+.auto-refresh-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #e6e9ef;
+}
+
+.auto-refresh-toggle .ant-typography,
+.auto-refresh-toggle .ant-typography-secondary,
+.auto-refresh-toggle .ant-typography span {
+    color: #c7d0db !important;
+}
+
+.auto-refresh-toggle .ant-switch {
+    background: #2a3139;
+}
+
+.auto-refresh-toggle .ant-switch-checked {
+    background: #177ddc;
+}
+
+.auto-refresh-toggle .ant-switch .ant-switch-handle::before {
+    background: #0f1216;
+}

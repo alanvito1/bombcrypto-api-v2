@@ -1,0 +1,53 @@
+networks:
+  base_default:
+    external: true
+
+name: bombcrypto
+services:
+
+  ap-rpc-api:
+    build:
+      context: ./rpc-api
+      dockerfile: Dockerfile
+    container_name: ap-rpc-api
+    ports:
+      - "8105:80"
+    networks:
+      - base_default
+    env_file:
+      - ./rpc-api/.env
+    environment:
+      TZ: 'Asia/Bangkok'
+      PORT: 80
+
+  ap-th-server:
+    build:
+      context: ./th-mode-server
+      dockerfile: Dockerfile
+    container_name: ap-th-server
+    ports:
+      - "8106:80"
+    networks:
+      - base_default
+    env_file:
+      - ./th-mode-server/.env
+    environment:
+      TZ: 'Asia/Bangkok'
+      PORT: 80
+      REDIS_CONNECTION_STRING: 'redis://@redis:6379/0'
+      USE_MOCK_DATA: true
+      REFRESH_INTERVAL: 5000
+
+  ap-blockchain-center:
+    build:
+      context: ./blockchain-center-api
+      dockerfile: Dockerfile
+    container_name: ap-blockchain-center
+    ports:
+      - "8107:80"
+    networks:
+      - base_default
+    environment:
+      TZ: 'Asia/Bangkok'
+
+  

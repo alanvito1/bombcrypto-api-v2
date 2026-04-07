@@ -1,0 +1,273 @@
+/* Modern styling for the pool tables - Dark, professional */
+.pool-container {
+    margin: 20px 0;
+    transition: all 0.3s ease;
+}
+
+.pool-header {
+    padding: 12px 16px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+.pool-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: white;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hero-count-badge {
+    background-color: rgba(255, 255, 255, 0.18);
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Table styling */
+.custom-table {
+    animation: fadeIn 0.5s ease-in-out;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+    background: #141a20;
+}
+
+.custom-table .ant-table {
+    background: #141a20;
+    color: #e6e9ef;
+}
+
+.custom-table .ant-table-thead > tr > th {
+    background-color: #182029;
+    font-weight: 600;
+    color: #dbe2ea;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.custom-table .ant-table-tbody > tr:hover > td,
+.custom-table .ant-table-tbody > tr.ant-table-row:hover > td {
+    background-color: #1c2530 !important;
+    color: #e6e9ef !important;
+}
+
+.custom-table .ant-table-tbody > tr > td {
+    transition: background-color 0.3s, color 0.3s;
+    color: #e6e9ef;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    background-color: #141a20 !important;
+}
+
+/* Row background for network - dark mode friendly */
+.network-polygon {
+    background-color: #1d1343; /* dark purple */
+}
+
+.network-bsc {
+    background-color: #8f531a; /* dark gold/orange */
+}
+
+.network-neutral {
+    background-color: #181a1b; /* neutral dark for all rows */
+}
+
+/* Column width styling */
+.column-user {
+    width: 40%;
+    min-width: 120px;
+}
+
+.column-hero-id {
+    width: 26%;
+    min-width: 100px;
+}
+
+.column-bcoin {
+    width: 12%;
+    min-width: 60px;
+}
+
+.column-sen {
+    width: 12%;
+    min-width: 60px;
+}
+
+.column-ticket {
+    width: 10%;
+    min-width: 30px;
+}
+
+/* Add style for the rank column */
+.column-rank {
+    text-align: center;
+}
+
+.rank-number {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    font-weight: bold;
+    color: #0f1216;
+    background-color: #69b1ff; /* slightly softer blue for dark */
+    border-radius: 50%;
+    font-size: 12px;
+}
+
+/* Style for top 3 ranks */
+.rank-number[data-rank="1"] {
+    background-color: #f7d046; /* tuned gold for dark */
+    color: #0f1216;
+}
+
+.rank-number[data-rank="2"] {
+    background-color: #cfd6dd; /* tuned silver */
+    color: #0f1216;
+}
+
+.rank-number[data-rank="3"] {
+    background-color: #d08b4a; /* bronze */
+    color: #0f1216;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hero ID styling */
+.hero-id {
+    font-family: monospace;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    color: #e6e9ef;
+}
+
+.hero-id-bsc {
+    color: #ccb400;
+}
+
+.hero-id-polygon {
+    color: #7e28f1;
+}
+
+/* Ticket Tag styling */
+.ticket-tag {
+    background: rgba(105, 177, 255, 0.15) !important;
+    border: 1px solid rgba(105, 177, 255, 0.35) !important;
+    color: #cfe5ff !important;
+}
+
+/* BCoin/Sen placeholders if needed */
+.bcoin-value, .sen-value {
+    color: #e6e9ef;
+}
+
+/* Pagination - dark theme */
+.custom-table .ant-table-pagination,
+.custom-table .ant-pagination {
+    color: #c7d0db;
+}
+
+.custom-table .ant-pagination-item {
+    background-color: #1a1f24;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.custom-table .ant-pagination-item a {
+    color: #c7d0db;
+}
+
+.custom-table .ant-pagination-item:hover a {
+    color: #e6e9ef;
+}
+
+.custom-table .ant-pagination-item-active {
+    border-color: #177ddc;
+}
+
+.custom-table .ant-pagination-item-active a {
+    color: #e6f4ff;
+}
+
+.custom-table .ant-pagination-prev .ant-pagination-item-link,
+.custom-table .ant-pagination-next .ant-pagination-item-link {
+    background-color: #1a1f24;
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #c7d0db;
+}
+
+.custom-table .ant-pagination-prev:hover .ant-pagination-item-link,
+.custom-table .ant-pagination-next:hover .ant-pagination-item-link {
+    color: #e6e9ef;
+}
+
+.custom-table .ant-pagination-disabled .ant-pagination-item-link {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+/* Pagination page size selector (if enabled) */
+.custom-table .ant-pagination-options .ant-select-selector {
+    background-color: #1a1f24 !important;
+    color: #e6e9ef !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Empty state styling for dark mode */
+.table-empty-dark {
+    background: #121415;
+    padding: 32px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.custom-table .ant-table-placeholder {
+    background: #29292c !important;
+    color: #fff !important;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.custom-table .ant-table-placeholder,
+.custom-table .ant-table-placeholder * {
+    color: #fff !important;
+}
+
+/* Responsive design */
+@media screen and (max-width: 992px) {
+    .pool-container {
+        margin: 10px 0;
+    }
+
+    /* Adjust column widths for smaller screens */
+    .column-user {
+        width: 35%;
+        min-width: 100px;
+    }
+
+    .column-hero-id {
+        width: 25%;
+        min-width: 90px;
+    }
+}

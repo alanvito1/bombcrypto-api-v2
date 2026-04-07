@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RPC CORS Tester</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: monospace; background: #0f0f0f; color: #e0e0e0; padding: 24px; }
+    h1 { color: #fff; margin-bottom: 4px; font-size: 18px; }
+    p.sub { color: #888; font-size: 12px; margin-bottom: 20px; }
+    #results { display: flex; flex-direction: column; gap: 8px; }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-left: 4px solid #444;
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .card.pending  { border-left-color: #555; }
+    .card.ok       { border-left-color: #22c55e; }
+    .card.blocked  { border-left-color: #ef4444; }
+    .card.error    { border-left-color: #f97316; }
+
+    .badge {
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      min-width: 90px;
+      text-align: center;
+    }
+    .badge.pending { background:#333; color:#aaa; }
+    .badge.ok      { background:#14532d; color:#4ade80; }
+    .badge.blocked { background:#450a0a; color:#f87171; }
+    .badge.error   { background:#431407; color:#fdba74; }
+
+    .info { flex: 1; font-size: 13px; }
+    .url  { color: #93c5fd; word-break: break-all; }
+    .detail { color: #888; font-size: 12px; margin-top: 3px; }
+    .block-num { color: #a3e635; }
+
+    button {
+      margin-bottom: 20px;
+      padding: 8px 20px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover { background: #1d4ed8; }
+    button:disabled { background: #374151; cursor: not-allowed; }
+
+    #summary { margin-bottom: 16px; font-size: 13px; color: #aaa; }
+    #summary span { font-weight: bold; }
+    .ok-count   { color: #4ade80; }
+    .fail-count { color: #f87171; }
+  </style>
+</head>
+<body>
+
+<h1>🔗 RPC CORS Tester — BSC &amp; Polygon</h1>
+<p class="sub">Runs a real <code>fetch()</code> from this page — shows exactly what a browser would allow or block</p>
+
+<button id="runBtn" onclick="runAll()">▶ Run All Tests</button>
+<div id="summary"></div>
+<div id="results"></div>
+
+<script>
+const BSC_ENDPOINTS = [
+  "https://bsc.nodereal.io",
+  "https://bsc-dataseed.ninicoin.io",
+  "https://bsc-dataseed1.ninicoin.io",
+  "https://bsc-dataseed2.ninicoin.io",
+  "https://bsc-dataseed3.ninicoin.io",
+  "https://bsc-dataseed4.ninicoin.io",
+  "https://bsc-dataseed.defibit.io",
+  "https://bsc-dataseed1.defibit.io",
+  "https://bsc-dataseed2.defibit.io",
+  "https://bsc-dataseed3.defibit.io",
+  "https://bsc-dataseed4.defibit.io",
+  "https://bsc-dataseed.nariox.org",
+  "https://bsc-dataseed.bnbchain.org",
+  "https://binance.nodereal.io",
+  "https://bsc-dataseed4.bnbchain.org",
+  "https://bsc-dataseed3.bnbchain.org",
+  "https://bsc-dataseed2.bnbchain.org",
+  "https://bsc-dataseed1.bnbchain.org",
+];
+
+const POLYGON_ENDPOINTS = [
+  "https://polygon.api.onfinality.io/public",
+  "https://polygon.rpc.subquery.network/public",
+  "https://polygon.lava.build",
+  "https://pol.leorpc.com/?api_key=FREE",
+  "https://poly.api.pocket.network/",
+  "https://rpc-mainnet.matic.quiknode.pro",
+  "https://polygon.gateway.tenderly.co",
+  "https://polygon.drpc.org/",
+  "https://polygon-bor.publicnode.com",
+  "https://1rpc.io/matic",
+  "https://api.zan.top/polygon-mainnet",
+  "https://polygon-public.nodies.app",
+  "https://gateway.tenderly.co/public/polygon",
+  "https://polygon-bor-rpc.publicnode.com",
+  "https://tenderly.rpc.polygon.community",
+  "https://polygon.publicnode.com",
+  "https://polygon-mainnet.gateway.tatum.io/",
+  "https://polygon-public.nodies.app/",
+];
+
+const PAYLOAD = JSON.stringify({ jsonrpc: "2.0", method: "eth_blockNumber", params: [], id: 1 });
+
+function hexToDecimal(hex) {
+  return parseInt(hex, 16).toLocaleString();
+}
+
+function renderCard(id, url, state, detail = "", blockNum = null, chain = "") {
+  const el = document.getElementById(id);
+  const labels = {
+    pending: "⏳ TESTING",
+    ok:      "✅ ALLOWED",
+    blocked: "❌ BLOCKED",
+    error:   "⚠️ ERROR",
+  };
+  el.className = `card ${state}`;
+  el.innerHTML = `
+    <span class="badge ${state}">${labels[state]}</span>
+    <div class="info">
+      <div class="url">${chain ? `<span style="color:#a78bfa;font-size:11px;margin-right:6px;">[${chain}]</span>` : ""}${url}</div>
+      ${blockNum ? `<div class="detail">Block: <span class="block-num">${hexToDecimal(blockNum)} (${blockNum})</span></div>` : ""}
+      ${detail ? `<div class="detail">${detail}</div>` : ""}
+    </div>`;
+}
+
+function addSectionHeader(resultsEl, label) {
+  const h = document.createElement("div");
+  h.style.cssText = "color:#a78bfa;font-size:13px;font-weight:bold;padding:8px 0 2px;border-bottom:1px solid #2a2a2a;margin-top:8px;";
+  h.textContent = label;
+  resultsEl.appendChild(h);
+}
+
+async function testEndpoint(url, id, chain) {
+  renderCard(id, url, "pending", "Sending fetch()…", null, chain);
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: PAYLOAD,
+    });
+    const data = await res.json();
+    if (data.result) {
+      renderCard(id, url, "ok", `HTTP ${res.status} — fetch() resolved`, data.result, chain);
+    } else if (data.error) {
+      renderCard(id, url, "error", `RPC error: ${data.error.message}`, null, chain);
+    } else {
+      renderCard(id, url, "error", `Unexpected response: ${JSON.stringify(data).slice(0, 120)}`, null, chain);
+    }
+    return "ok";
+  } catch (err) {
+    const msg = err.message || String(err);
+    const isCors = msg.toLowerCase().includes("cors") || msg.toLowerCase().includes("failed to fetch") || msg.toLowerCase().includes("networkerror");
+    renderCard(id, url, "blocked", isCors ? `CORS blocked — ${msg}` : `fetch() threw: ${msg}`, null, chain);
+    return "fail";
+  }
+}
+
+async function runAll() {
+  const btn = document.getElementById("runBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ Running…";
+
+  const resultsEl = document.getElementById("results");
+  const summaryEl = document.getElementById("summary");
+  resultsEl.innerHTML = "";
+  summaryEl.innerHTML = "";
+
+  const allEntries = [
+    ...BSC_ENDPOINTS.map(url => ({ url, chain: "BSC" })),
+    ...POLYGON_ENDPOINTS.map(url => ({ url, chain: "Polygon" })),
+  ];
+
+  // Create placeholder cards with section headers
+  addSectionHeader(resultsEl, "⛓ BSC");
+  BSC_ENDPOINTS.forEach((url, i) => {
+    const div = document.createElement("div");
+    div.id = `card-bsc-${i}`;
+    resultsEl.appendChild(div);
+    renderCard(`card-bsc-${i}`, url, "pending", "Queued…", null, "BSC");
+  });
+
+  addSectionHeader(resultsEl, "⛓ Polygon");
+  POLYGON_ENDPOINTS.forEach((url, i) => {
+    const div = document.createElement("div");
+    div.id = `card-pol-${i}`;
+    resultsEl.appendChild(div);
+    renderCard(`card-pol-${i}`, url, "pending", "Queued…", null, "Polygon");
+  });
+
+  // Run all in parallel
+  const [bscResults, polResults] = await Promise.all([
+    Promise.all(BSC_ENDPOINTS.map((url, i) => testEndpoint(url, `card-bsc-${i}`, "BSC"))),
+    Promise.all(POLYGON_ENDPOINTS.map((url, i) => testEndpoint(url, `card-pol-${i}`, "Polygon"))),
+  ]);
+
+  const allResults = [...bscResults, ...polResults];
+  const okCount   = allResults.filter(r => r === "ok").length;
+  const failCount = allResults.filter(r => r !== "ok").length;
+  summaryEl.innerHTML =
+    `Results: <span class="ok-count">${okCount} allowed</span> / <span class="fail-count">${failCount} blocked/error</span> out of ${allResults.length} endpoints`;
+
+  btn.disabled = false;
+  btn.textContent = "▶ Run Again";
+}
+</script>
+</body>
+</html>
+

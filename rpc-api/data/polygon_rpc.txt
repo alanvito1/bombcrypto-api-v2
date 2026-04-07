@@ -1,0 +1,15 @@
+https://polygon.api.onfinality.io/public
+https://polygon.rpc.subquery.network/public
+https://polygon.lava.build
+https://poly.api.pocket.network/
+https://rpc-mainnet.matic.quiknode.pro
+https://polygon.gateway.tenderly.co
+https://polygon.drpc.org/
+https://polygon-bor.publicnode.com
+https://api.zan.top/polygon-mainnet
+https://polygon-public.nodies.app
+https://gateway.tenderly.co/public/polygon
+https://polygon-bor-rpc.publicnode.com
+https://tenderly.rpc.polygon.community
+https://polygon.publicnode.com
+https://polygon-public.nodies.app/

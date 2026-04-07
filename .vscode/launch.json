@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug th-mode-server",
+            "runtimeExecutable": "node",
+            "runtimeArgs": ["--inspect"],
+            "program": "${workspaceFolder}/th-mode-server/node_modules/.bin/vite-node",
+            "args": ["${workspaceFolder}/th-mode-server/src/Server.ts"],
+            "cwd": "${workspaceFolder}/th-mode-server",
+            "sourceMaps": true,
+            "resolveSourceMapLocations": ["**", "!**/node_modules/**"],
+            "env": {
+                "NODE_ENV": "development"
+            }
+        }
+    ]
+}

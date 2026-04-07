@@ -1,0 +1,80 @@
+{
+  "getLogs": {
+    "polygon": [
+      "https://polygon.api.onfinality.io/public",
+      "https://polygon.rpc.subquery.network/public",
+      "https://polygon.lava.build",
+      "https://poly.api.pocket.network/",
+      "https://rpc-mainnet.matic.quiknode.pro",
+      "https://polygon.gateway.tenderly.co",
+      "https://polygon.drpc.org/",
+      "https://polygon-bor.publicnode.com",
+      "https://api.zan.top/polygon-mainnet",
+      "https://polygon-public.nodies.app",
+      "https://gateway.tenderly.co/public/polygon",
+      "https://polygon-bor-rpc.publicnode.com",
+      "https://tenderly.rpc.polygon.community",
+      "https://polygon.publicnode.com",
+      "https://polygon-public.nodies.app/"
+    ],
+    "bsc": [
+      "https://bsc.nodereal.io",
+      "https://bsc-dataseed.ninicoin.io",
+      "https://bsc-dataseed1.ninicoin.io",
+      "https://bsc-dataseed2.ninicoin.io",
+      "https://bsc-dataseed3.ninicoin.io",
+      "https://bsc-dataseed4.ninicoin.io",
+      "https://bsc-dataseed.defibit.io",
+      "https://bsc-dataseed1.defibit.io",
+      "https://bsc-dataseed2.defibit.io",
+      "https://bsc-dataseed3.defibit.io",
+      "https://bsc-dataseed4.defibit.io",
+      "https://bsc-dataseed.nariox.org",
+      "https://bsc-dataseed.bnbchain.org",
+      "https://binance.nodereal.io",
+      "https://bsc-dataseed4.bnbchain.org",
+      "https://bsc-dataseed3.bnbchain.org",
+      "https://bsc-dataseed2.bnbchain.org",
+      "https://bsc-dataseed1.bnbchain.org"
+    ]
+  },
+  "general": {
+    "polygon": [
+      "https://polygon.api.onfinality.io/public",
+      "https://polygon.rpc.subquery.network/public",
+      "https://polygon.lava.build",
+      "https://poly.api.pocket.network/",
+      "https://rpc-mainnet.matic.quiknode.pro",
+      "https://polygon.gateway.tenderly.co",
+      "https://polygon.drpc.org/",
+      "https://polygon-bor.publicnode.com",
+      "https://api.zan.top/polygon-mainnet",
+      "https://polygon-public.nodies.app",
+      "https://gateway.tenderly.co/public/polygon",
+      "https://polygon-bor-rpc.publicnode.com",
+      "https://tenderly.rpc.polygon.community",
+      "https://polygon.publicnode.com",
+      "https://polygon-public.nodies.app/"
+    ],
+    "bsc": [
+      "https://bsc.nodereal.io",
+      "https://bsc-dataseed.ninicoin.io",
+      "https://bsc-dataseed1.ninicoin.io",
+      "https://bsc-dataseed2.ninicoin.io",
+      "https://bsc-dataseed3.ninicoin.io",
+      "https://bsc-dataseed4.ninicoin.io",
+      "https://bsc-dataseed.defibit.io",
+      "https://bsc-dataseed1.defibit.io",
+      "https://bsc-dataseed2.defibit.io",
+      "https://bsc-dataseed3.defibit.io",
+      "https://bsc-dataseed4.defibit.io",
+      "https://bsc-dataseed.nariox.org",
+      "https://bsc-dataseed.bnbchain.org",
+      "https://binance.nodereal.io",
+      "https://bsc-dataseed4.bnbchain.org",
+      "https://bsc-dataseed3.bnbchain.org",
+      "https://bsc-dataseed2.bnbchain.org",
+      "https://bsc-dataseed1.bnbchain.org"
+    ]
+  }
+}
