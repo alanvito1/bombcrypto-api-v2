@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import { handleGetLogs } from "./handlers/getLogs.js";
 import { handleLatestBlockNumber } from "./handlers/latestBlockNumber.js";
 import { handleGetTransaction, handleGetTransactionReceipt } from "./handlers/transaction.js";
+import { handleGetTransactionCount } from "./handlers/transactionCount.js";
 import { handleCallContract } from "./handlers/callContract.js";
 import { handleAnalytics } from "./handlers/analytics.js";
 import { handleToggleRpcPause } from "./handlers/rpcControl.js";
@@ -51,6 +52,7 @@ app.post("/callContract", handleCallContract);
 app.post("/getLogs", handleGetLogs);
 app.post("/getTransaction", handleGetTransaction);
 app.post("/getTransactionReceipt", handleGetTransactionReceipt);
+app.post("/getTransactionCount", handleGetTransactionCount);
 app.post("/getBlockTimestamp", handleGetBlockTimestamp);
 
 app.listen(PORT, () => {
@@ -65,5 +67,6 @@ app.listen(PORT, () => {
   console.log(`POST /getLogs - Fetch Ethereum logs with round-robin RPC`);
   console.log(`POST /getTransaction - Get transaction by hash`);
   console.log(`POST /getTransactionReceipt - Get transaction receipt by hash`);
+  console.log(`POST /getTransactionCount - Get transaction count (nonce) for an address`);
   console.log(`POST /getBlockTimestamp - Get block timestamp by number`);
 });
