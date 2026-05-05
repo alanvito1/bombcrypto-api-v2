@@ -1,4 +1,4 @@
-import { Controller, Get, Query, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Query, BadRequestException, Param } from '@nestjs/common';
 import { NftService } from './nft.service';
 
 /**
@@ -91,5 +91,18 @@ export class NftController {
   ) {
     const parsedLimit = limit ? Math.min(parseInt(limit.toString(), 10), 100) : 20;
     return this.nftService.getLatestNfts(network, ownerAddress, cursor, parsedLimit);
+  }
+
+  /**
+   * Retrieves detailed information for a single NFT by its Token ID.
+   * @param id The Token ID of the NFT.
+   */
+  @Get(':id')
+  async getNftById(@Param('id') id: string) {
+    const nft = await this.nftService.getNftById(id);
+    if (!nft) {
+      throw new BadRequestException('NFT not found');
+    }
+    return nft;
   }
 }

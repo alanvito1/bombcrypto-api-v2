@@ -277,4 +277,20 @@ export class NftService {
     await this.redis.set(cacheKey, JSON.stringify(res), 'EX', 60);
     return res;
   }
+
+  /**
+   * Retrieves full details for a specific NFT by its Token ID.
+   * @param tokenId The unique ID of the NFT.
+   */
+  async getNftById(tokenId: string) {
+    const cacheKey = `nft:detail:${tokenId}`;
+    const cached = await this.redis.get(cacheKey);
+    if (cached) return JSON.parse(cached);
+
+    const nft = await this.nftRepo.findOne({ where: { token_id: tokenId } });
+    if (nft) {
+      await this.redis.set(cacheKey, JSON.stringify(nft), 'EX', 300); // Cache for 5 mins
+    }
+    return nft;
+  }
 }
