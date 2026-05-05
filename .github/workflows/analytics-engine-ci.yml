@@ -1,10 +1,14 @@
-name: BombStats API CI
+name: BombStats Analytics Engine CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "bombstats-incrementation" ]
+    paths:
+      - 'ap-analytics-engine/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'ap-analytics-engine/**'
 
 jobs:
   build-and-test:
@@ -30,6 +34,10 @@ jobs:
         ports:
           - 6379:6379
 
+    defaults:
+      run:
+        working-directory: ./ap-analytics-engine
+
     steps:
     - uses: actions/checkout@v3
 
@@ -38,6 +46,7 @@ jobs:
       with:
         node-version: '20.x'
         cache: 'npm'
+        cache-dependency-path: './ap-analytics-engine/package-lock.json'
 
     - name: Install dependencies
       run: npm ci
@@ -51,7 +60,7 @@ jobs:
     - name: Build
       run: npm run build
 
-    - name: Run Tests (Smoke)
+    - name: Run Tests (E2E)
       env:
         DB_HOST: localhost
         DB_PORT: 5432
