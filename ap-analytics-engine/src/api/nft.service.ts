@@ -7,6 +7,10 @@ import Redis from 'ioredis';
 import { Stake } from '../database/entities/stake.entity';
 import { Claim } from '../database/entities/claim.entity';
 
+/**
+ * Service responsible for business logic and data aggregation for NFTs and Analytics.
+ * Implements Redis-based caching for high-performance data retrieval.
+ */
 @Injectable()
 export class NftService {
   private readonly logger = new Logger(NftService.name);
@@ -26,6 +30,13 @@ export class NftService {
     });
   }
 
+  /**
+   * Retrieves a paginated list of NFTs from the database with caching.
+   * @param network The network to filter by ('bsc', 'polygon', or 'all').
+   * @param ownerAddress Optional wallet address of the NFT owner.
+   * @param cursorTokenId Cursor for pagination (token_id).
+   * @param limit Number of results to return (max 100).
+   */
   async getLatestNfts(network: string, ownerAddress?: string, cursorTokenId?: string, limit: number = 20) {
     const cacheKey = `nfts:${network}:${ownerAddress || 'all'}:${cursorTokenId || 'latest'}:${limit}`;
     
@@ -75,6 +86,10 @@ export class NftService {
     return result;
   }
 
+  /**
+   * Calculates the top stakers based on the number of hero NFTs they own.
+   * @param limit Number of stakers to return.
+   */
   async getTopStakers(limit: number = 20) {
     const cacheKey = `ranking:stakers:${limit}`;
     const cachedData = await this.redis.get(cacheKey);
@@ -92,6 +107,12 @@ export class NftService {
     return data;
   }
 
+  /**
+   * Aggregates top stakes by token amount and network.
+   * @param token Token symbol ('bcoin' or 'sens').
+   * @param network Network identifier.
+   * @param limit Number of results to return.
+   */
   async getTopStakes(token: string = 'bcoin', network: string = 'all', limit: number = 20) {
     const cacheKey = `ranking:stake:${token}:${network}:${limit}`;
     const cachedData = await this.redis.get(cacheKey);
@@ -114,6 +135,10 @@ export class NftService {
     return data;
   }
 
+  /**
+   * Calculates global cumulative stakes across all networks and tokens.
+   * @param limit Number of results to return.
+   */
   async getGlobalStakes(limit: number = 20) {
     const cacheKey = `ranking:global-stake:${limit}`;
     const cachedData = await this.redis.get(cacheKey);
@@ -131,6 +156,12 @@ export class NftService {
     return data;
   }
 
+  /**
+   * Aggregates top claims by token and network.
+   * @param token Token symbol.
+   * @param network Network identifier.
+   * @param limit Number of results to return.
+   */
   async getTopClaims(token: string = 'bcoin', network: string = 'all', limit: number = 20) {
     const cacheKey = `ranking:claim:${token}:${network}:${limit}`;
     const cachedData = await this.redis.get(cacheKey);
@@ -153,6 +184,10 @@ export class NftService {
     return data;
   }
 
+  /**
+   * Generates the real-time leaderboard data for Treasure Hunt mode.
+   * Aggregates NFT rarities and links them with staking data for a unified view.
+   */
   async getThLeaderboard() {
     const cacheKey = `ranking:th-leaderboard`;
     const cachedData = await this.redis.get(cacheKey);
@@ -209,6 +244,10 @@ export class NftService {
     return result;
   }
 
+  /**
+   * Generates a high-level summary of the entire protocol health.
+   * Includes TVL equivalents and total asset distribution.
+   */
   async getSummary() {
     const cacheKey = 'summary';
     const cached = await this.redis.get(cacheKey);

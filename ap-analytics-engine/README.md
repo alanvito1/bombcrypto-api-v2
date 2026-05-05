@@ -1,73 +1,67 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# BombStats Analytics Engine (Senspark Edition)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+The **BombStats Analytics Engine** is a high-performance analytics service designed for the BombCrypto (Senspark) ecosystem. It provides real-time insights into protocol health, NFT distributions, and staking activities.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Overview
+- **Framework**: NestJS (TypeScript)
+- **Database**: PostgreSQL (TypeORM)
+- **Caching**: Redis
+- **Infrastructure**: Dockerized (mapped to `/analytics-api` via Vite proxy)
 
-## Description
+## 🛠️ Architecture
+The service follows the Standard NestJS modular architecture:
+- `NftModule`: Handles all NFT metadata, rarity tracking, and global statistics.
+- `ThModule`: Manages Treasure Hunt specific data and leaderboards.
+- `DatabaseModule`: Centralized TypeORM configuration and migrations.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📡 API Endpoints (Prefix: `/api`)
 
-## Installation
+### NFT & Analytics
+- `GET /api/nfts/overview-stats`: Global protocol metrics (TVL, token prices, total assets).
+- `GET /api/nfts/rankings`: Unified ranking endpoint for claims, staking, and asset counts.
+- `GET /api/nfts/wallet/:address`: Live asset feed for a specific wallet address.
+- `GET /api/nfts/feed`: Global live feed of recently processed assets.
 
+### Treasure Hunt
+- `GET /api/th/leaderboard`: Real-time race rankings for Treasure Mode.
+
+## 🚦 Development Workflow
+
+### Prerequisites
+- Node.js 20+
+- Docker & Docker Compose
+
+### Setup & Installation
 ```bash
-$ yarn install
+# Install dependencies
+npm install
+
+# Build the production bundle
+npm run build
 ```
 
-## Running the app
-
+### Database Orchestration
+The engine includes a specialized seeding tool for development and testing:
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+# Seed the database with mock protocol data
+docker exec ap-analytics-engine node dist/seed.js
 ```
 
-## Test
-
+## 🐳 Docker Deployment
+To deploy as part of the Senspark monorepo:
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+# Build and start the service
+docker-compose up -d --build ap-analytics-engine
 ```
 
-## Support
+## 🧪 Testing
+```bash
+# End-to-end testing
+npm run test:e2e
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Linting
+npm run lint
+```
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+---
+*Maintained by the Senspark Engineering Team. Powered by Antigravity.*
